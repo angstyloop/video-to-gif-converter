@@ -83,6 +83,11 @@ export default {
       this.setDone('video')
     },
     async convert() {
+      // create a secure context for ffmpeg to post sharedarraybuffer
+      if (! window.crossOriginIsolated) {
+        throw Error("Context is not cross-origin isolated! It is unsafe for ffmpeg to post wasm that uses SharedArrayBuffer.")
+      }
+
       if (! this.isDone('video')) {
         console.warn("FFMPEG isn't ready.")
         return 
